@@ -1,0 +1,64 @@
+﻿@page "/"
+@page "/charts"
+@layout MainLayout
+@inherits Muserank2.Pages.ChartsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Muserank2.Models.Muse
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Charts">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenSplitButton Icon="get_app" style="margin-bottom: 10px; margin-left: 0px" Text="Export" Click="@Splitbutton0Click">
+          <ChildContent>
+            <RadzenSplitButtonItem Text="Excel" Value="xlsx">
+            </RadzenSplitButtonItem>
+            <RadzenSplitButtonItem Text="CSV" Value="csv">
+            </RadzenSplitButtonItem>
+          </ChildContent>
+        </RadzenSplitButton>
+        <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load();})">
+        </RadzenTextBox>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getChartsResult" FilterMode="FilterMode.Advanced" TItem="Muserank2.Models.Muse.Chart" PageSize="50">
+          <Columns>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="NENDO" Title="NENDO">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="GENRE" Title="GENRE">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="HYOKA_NUM" Title="HYOKA NUM">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="KYOKU_NAME" Title="KYOKU NAME">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="AUTHOR_NAME" Title="AUTHOR NAME">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="HOUR" Title="HOUR">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="MINUTE" Title="MINUTE">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="SECOND" Title="SECOND">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="MEMBER" Title="MEMBER">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="FILE_SIZE" Title="FILE SIZE">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="false" Width="70px">
+              <Template Context="muserank2ModelsMuseChart">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, muserank2ModelsMuseChart))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+          <RadzenChart>
+              <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = x.Sum(y => y.FILE_SIZE)}).OrderBy(x => x.FileSize).Where(x => x.FileSize >= 1024*1024)" Title="作者" ValueProperty="FileSize" CategoryProperty="Name" />
+              <RadzenValueAxis>
+                  <RadzenAxisTitle Text="作者別ファイルサイズ最大"></RadzenAxisTitle>
+              </RadzenValueAxis>
+          </RadzenChart>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

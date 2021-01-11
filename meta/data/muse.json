@@ -1,0 +1,414 @@
+{
+  "info": {
+    "title": "muse",
+    "x-type": "odata",
+    "x-connector": "oracle",
+    "x-cascade-delete": false
+  },
+  "definitions": {
+    "Chart": {
+      "x-table": "SYSTEM.CHART",
+      "resource": "Charts",
+      "required": [
+        "NENDO",
+        "GENRE",
+        "HYOKA_NUM",
+        "KYOKU_NAME",
+        "AUTHOR_NAME",
+        "SECOND",
+        "MEMBER",
+        "FILE_SIZE"
+      ],
+      "properties": {
+        "NENDO": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "string",
+          "length": 4
+        },
+        "GENRE": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "string",
+          "length": 50
+        },
+        "HYOKA_NUM": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "KYOKU_NAME": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "string",
+          "length": 400
+        },
+        "AUTHOR_NAME": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "string",
+          "length": 4000
+        },
+        "HOUR": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "MINUTE": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "SECOND": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "MEMBER": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "FILE_SIZE": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/Charts": {
+      "get": {
+        "operationId": "getCharts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Chart"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createChart",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Chart",
+            "schema": {
+              "$ref": "#/definitions/Chart"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Chart"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Charts(NENDO='{NENDO}',GENRE='{GENRE}',HYOKA_NUM={HYOKA_NUM},KYOKU_NAME='{KYOKU_NAME}',AUTHOR_NAME='{AUTHOR_NAME}',HOUR={HOUR},MINUTE={MINUTE},SECOND={SECOND},MEMBER={MEMBER},FILE_SIZE={FILE_SIZE})": {
+      "delete": {
+        "operationId": "deleteChart",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "NENDO",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "GENRE",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HYOKA_NUM",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "KYOKU_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "AUTHOR_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HOUR",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MINUTE",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "SECOND",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MEMBER",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "FILE_SIZE",
+            "type": "number",
+            "format": "decimal"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getChartByNENDOAndGENREAndHYOKA_NUMAndKYOKU_NAMEAndAUTHOR_NAMEAndHOURAndMINUTEAndSECONDAndMEMBERAndFILE_SIZE",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "NENDO",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "GENRE",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HYOKA_NUM",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "KYOKU_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "AUTHOR_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HOUR",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MINUTE",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "SECOND",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MEMBER",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "FILE_SIZE",
+            "type": "number",
+            "format": "decimal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Chart"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateChart",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "NENDO",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "GENRE",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HYOKA_NUM",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "KYOKU_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "AUTHOR_NAME",
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "HOUR",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MINUTE",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "SECOND",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "MEMBER",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "path",
+            "name": "FILE_SIZE",
+            "type": "number",
+            "format": "decimal"
+          },
+          {
+            "in": "body",
+            "name": "Chart",
+            "schema": {
+              "$ref": "#/definitions/Chart"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelChartChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Chart",
+            "schema": {
+              "$ref": "#/definitions/Chart"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "basePath": "/odata/muse",
+  "host": "localhost:5000",
+  "schemes": [
+    "http"
+  ]
+}

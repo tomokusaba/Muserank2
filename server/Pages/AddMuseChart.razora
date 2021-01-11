@@ -1,0 +1,143 @@
+﻿@page "/add-muse-chart"
+@layout MainLayout
+@inherits Muserank2.Pages.AddMuseChartComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Muserank2.Models.Muse
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@musechart" Visible="@(musechart != null)" TItem="Muserank2.Models.Muse.MuseChart" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Kyoku Name" Component="KYOKU_NAME" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="400" style="display: block; width: 100%" @bind-Value="@(musechart.KYOKU_NAME)" Name="KYOKU_NAME">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="KYOKU_NAME" Text="KYOKU_NAME is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Hyoka Num" Component="HYOKA_NUM" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(musechart.HYOKA_NUM)" Name="HYOKA_NUM">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="HYOKA_NUM" Text="HYOKA_NUM is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Nendo" Component="NENDO" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="4" style="display: block; width: 100%" @bind-Value="@(musechart.NENDO)" Name="NENDO">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="NENDO" Text="NENDO is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Second" Component="SECOND" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(musechart.SECOND)" Name="SECOND">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="SECOND" Text="SECOND is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Member" Component="MEMBER" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(musechart.MEMBER)" Name="MEMBER">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="MEMBER" Text="MEMBER is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Minute" Component="MINUTE" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="width: 100%" @bind-Value="@(musechart.MINUTE)" Name="MINUTE">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Genre" Component="GENRE" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="50" style="display: block; width: 100%" @bind-Value="@(musechart.GENRE)" Name="GENRE">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="GENRE" Text="GENRE is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Author Name" Component="AUTHOR_NAME" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox MaxLength="4000" style="display: block; width: 100%" @bind-Value="@(musechart.AUTHOR_NAME)" Name="AUTHOR_NAME">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="AUTHOR_NAME" Text="AUTHOR_NAME is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="File Size" Component="FILE_SIZE" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(musechart.FILE_SIZE)" Name="FILE_SIZE">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="FILE_SIZE" Text="FILE_SIZE is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Hour" Component="HOUR" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="width: 100%" @bind-Value="@(musechart.HOUR)" Name="HOUR">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" ButtonStyle="ButtonStyle.Primary">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

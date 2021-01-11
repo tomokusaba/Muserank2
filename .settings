@@ -1,0 +1,1 @@
+{"deploy":{"provider":"zip","server":"","user":"","password":"","siteName":"/","connectionStrings":{"muse":{"value":"Data Source=192.168.11.130/xe;User Id=system;Password=hy76cjs9;"}},"endPoints":{},"method":"computerName","removeAdditional":true}}
