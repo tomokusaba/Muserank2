@@ -10,6 +10,7 @@
   <ChildContent>
     <RadzenHeading Size="H1" Text="Charts">
     </RadzenHeading>
+      <RadzenLink Path="#graph" Text="グラフへ" Visible="false" />
     <div class="row">
         <div class="col-md-12">
             <RadzenSplitButton Icon="get_app" style="margin-bottom: 10px; margin-left: 0px" Text="Export" Click="@Splitbutton0Click">
@@ -20,9 +21,9 @@
                     </RadzenSplitButtonItem>
                 </ChildContent>
             </RadzenSplitButton>
-            <RadzenTextBox Placeholder="Search ..." style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load();})">
+            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })"  Value="@seachprm" >
             </RadzenTextBox>
-            <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getChartsResult" FilterMode="FilterMode.Advanced" TItem="Muserank2.Models.Muse.Chart" PageSize="50">
+            <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getChartsResult" FilterMode="FilterMode.Advanced" TItem="Muserank2.Models.Muse.Chart" PageSize="20">
                 <Columns>
                     <RadzenGridColumn TItem="Muserank2.Models.Muse.Chart" Property="NENDO" Title="NENDO">
                     </RadzenGridColumn>
@@ -52,24 +53,31 @@
                     </RadzenGridColumn>
                 </Columns>
             </RadzenGrid>
+
+            <h2 id="graph">グラフ</h2>
+            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox1" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })" Value="@seachprm" >
+            </RadzenTextBox>
+
+            ファイルサイズ<RadzenNumeric TValue="int" Min="1" Name="FileSize_min" @bind-Value="@filesize" />KB以上
             <RadzenChart Style="height:800px;">
-                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = x.Sum(y => y.FILE_SIZE)}).OrderBy(x => x.FileSize).Where(x => x.FileSize >= 1024*256)" Title="Bytes" ValueProperty="FileSize" CategoryProperty="Name" />
+                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = x.Sum(y => y.FILE_SIZE)}).OrderBy(x => x.FileSize).Where(x => x.FileSize >= 1024 * filesize)" Title="Bytes" ValueProperty="FileSize" CategoryProperty="Name" />
                 <RadzenValueAxis>
-                    <RadzenAxisTitle Text="作者別ファイルサイズ最大"></RadzenAxisTitle>
+                    <RadzenAxisTitle Text=@string.Format("作者別ファイルサイズ最大　ファイルサイズ{0}KB以上",filesize)></RadzenAxisTitle>
+                </RadzenValueAxis>
+            </RadzenChart>
+
+            登録曲数<RadzenNumeric TValue="int" Min="1" Name="KyokuSu_min" @bind-Value="@kyokusu" />以上
+            <RadzenChart Style="height:800px;">
+                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 2)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= kyokusu)" Title="★獲得率" ValueProperty="FileSize" CategoryProperty="Name" />
+                <RadzenValueAxis Max="1.0" Min="0" Step="0.1" StrokeWidth="1">
+                    <RadzenAxisTitle Text=@string.Format("★獲得率　登録{0}曲以上",kyokusu)></RadzenAxisTitle>
                 </RadzenValueAxis>
             </RadzenChart>
 
             <RadzenChart Style="height:800px;">
-                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 2)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= 20)" Title="★獲得率" ValueProperty="FileSize" CategoryProperty="Name" />
+                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 1)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= kyokusu)" Title="☆以上獲得率" ValueProperty="FileSize" CategoryProperty="Name"  />
                 <RadzenValueAxis Max="1.0" Min="0" Step="0.1">
-                    <RadzenAxisTitle Text="★獲得率　登録20曲以上"></RadzenAxisTitle>
-                </RadzenValueAxis>
-            </RadzenChart>
-
-            <RadzenChart Style="height:800px;">
-                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 1)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= 20)" Title="☆以上獲得率" ValueProperty="FileSize" CategoryProperty="Name" />
-                <RadzenValueAxis Max="1.0" Min="0" Step="0.1">
-                    <RadzenAxisTitle Text="☆以上獲得率　登録20曲以上"></RadzenAxisTitle>
+                    <RadzenAxisTitle Text=@string.Format("☆以上獲得率　登録{0}曲以上",kyokusu)></RadzenAxisTitle>
                 </RadzenValueAxis>
             </RadzenChart>
 

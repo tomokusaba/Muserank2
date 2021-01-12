@@ -48,6 +48,13 @@ namespace Muserank2.Pages
         protected MuseService Muse { get; set; }
         protected RadzenGrid<Muserank2.Models.Muse.Chart> grid0;
 
+        protected int filesize { get; set; } = 256;
+        protected int kyokusu { get; set; } = 20;
+
+        protected string seachprm { get; set; } = "";
+        protected string seachprm2 { get; set; } = "";
+        protected int hoshiH { get; set; } = 800;
+
         string _search;
         protected string search
         {
