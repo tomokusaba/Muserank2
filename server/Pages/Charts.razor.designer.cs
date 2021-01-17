@@ -55,6 +55,8 @@ namespace Muserank2.Pages
         protected string seachprm2 { get; set; } = "";
         protected int hoshiH { get; set; } = 800;
 
+        protected string dropGenre { get; set; } = "ポピュラー";
+
         string _search;
         protected string search
         {

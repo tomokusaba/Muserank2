@@ -21,7 +21,7 @@
                     </RadzenSplitButtonItem>
                 </ChildContent>
             </RadzenSplitButton>
-            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })"  Value="@seachprm" >
+            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox0" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })" Value="@seachprm">
             </RadzenTextBox>
             <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getChartsResult" FilterMode="FilterMode.Advanced" TItem="Muserank2.Models.Muse.Chart" PageSize="20">
                 <Columns>
@@ -55,7 +55,7 @@
             </RadzenGrid>
 
             <h2 id="graph">グラフ</h2>
-            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox1" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })" Value="@seachprm" >
+            <RadzenTextBox Placeholder="Search ...グリッドとグラフが変化します" style="display: block; margin-bottom: 10px; width: 100%" Name="Textbox1" @oninput="@(async(args) => {search = $"{args.Value}";await Load(); seachprm =(string) args.Value; })" Value="@seachprm">
             </RadzenTextBox>
 
             ファイルサイズ<RadzenNumeric TValue="int" Min="1" Name="FileSize_min" @bind-Value="@filesize" />KB以上
@@ -75,12 +75,25 @@
             </RadzenChart>
 
             <RadzenChart Style="height:800px;">
-                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 1)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= kyokusu)" Title="☆以上獲得率" ValueProperty="FileSize" CategoryProperty="Name"  />
+                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => x.AUTHOR_NAME).Select( x => new { Name = x.Key, FileSize = (double)(x.Count(y => y.HYOKA_NUM >= 1)) / x.Count(y => y.FILE_SIZE >= 0), KyokuSu = x.Count(y => y.FILE_SIZE >= 0)}).OrderBy(x => x.FileSize).Where(x => x.KyokuSu >= kyokusu)" Title="☆以上獲得率" ValueProperty="FileSize" CategoryProperty="Name" />
                 <RadzenValueAxis Max="1.0" Min="0" Step="0.1">
                     <RadzenAxisTitle Text=@string.Format("☆以上獲得率　登録{0}曲以上",kyokusu)></RadzenAxisTitle>
                 </RadzenValueAxis>
             </RadzenChart>
 
+            <RadzenChart Style="height:400px;">
+                <RadzenDonutSeries Data="@getChartsResult.GroupBy(x => x.GENRE).Select( x => new {Name = x.Key, Count = x.Count()}).OrderByDescending(x => x.Count)" CategoryProperty="Name" ValueProperty="Count" Title="ジャンルシェアー" />
+            </RadzenChart>
+            <RadzenDropDown TValue="string" Data="@getChartsResult.Select(x => x.GENRE).Distinct()" @bind-Value="@dropGenre" />
+            <RadzenChart Style="height:400px;">
+                <RadzenDonutSeries Data="@getChartsResult.GroupBy(x => new {Author = x.AUTHOR_NAME, Genre = x.GENRE}).Select(x => new {Name = (x.Count() >= kyokusu) ?  x.Key.Author:  "その他", Count = x.Count(),Genre = x.Key.Genre}).Where(x => x.Genre == dropGenre).GroupBy(x => x.Name).Select(x => new {Auther = x.Key, RenderingOrder = x.Sum(y =>y.Count)}).OrderByDescending(x => x.RenderingOrder)" Title="ジャンル別作成者シェアー" CategoryProperty="Auther" ValueProperty="RenderingOrder" RenderingOrder="1"  />
+            </RadzenChart>
+            <RadzenChart Style="height:800px;">
+                <RadzenBarSeries Data="@getChartsResult.GroupBy(x => new {Author = x.AUTHOR_NAME, Genre = x.GENRE}).Select(x => new {Name = x.Key.Author, Count = x.Count(),Genre = x.Key.Genre}).Where(x => x.Genre == dropGenre).OrderBy(x => x.Count).Where(x => x.Count >= kyokusu)" Title="ジャンル別Top作成者" ValueProperty="Count" CategoryProperty="Name" RenderingOrder="1" />
+                <RadzenValueAxis Min="0" Step="1">
+                    <RadzenAxisTitle Text=@string.Format("ジャンル別Top作成者　登録{0}曲以上",kyokusu)></RadzenAxisTitle>
+                </RadzenValueAxis>
+            </RadzenChart>
         </div>
     </div>
   </ChildContent>
